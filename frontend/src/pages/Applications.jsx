@@ -40,27 +40,20 @@ function Applications() {
         }
 
     }
-
     async function handleWithdraw(id) {
 
         try {
 
-            const removedApp =
-                applications.find(
-                    (app) =>
-                        app._id === id
-                );
-
-            await API.delete(
-                `/applications/${id}`
+            const removedApp = applications.find(
+                (app) => app._id === id
             );
+
+            await API.delete(`/applications/${id}`);
 
             if (removedApp) {
 
                 const userEmail =
-                    localStorage.getItem(
-                        "userEmail"
-                    );
+                    localStorage.getItem("userEmail");
 
                 const appliedJobs =
                     JSON.parse(
@@ -72,33 +65,17 @@ function Applications() {
                 const updatedJobs =
                     appliedJobs.filter(
                         (jobId) =>
-                            jobId !==
-                            removedApp.jobId
+                            jobId !== removedApp.jobId
                     );
 
                 localStorage.setItem(
-
                     `appliedJobs_${userEmail}`,
-
-                    JSON.stringify(
-                        updatedJobs
-                    )
-
+                    JSON.stringify(updatedJobs)
                 );
 
             }
 
-            const updatedApplications =
-                applications.filter(
-                    (app) =>
-                        app._id !== id
-                );
-
-            setApplications(
-                updatedApplications
-            );
-
-            window.location.reload();
+            fetchApplications();
 
             alert(
                 "Application withdrawn successfully"
